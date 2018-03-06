@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage{amsmath}
+\input{macros.tex}
+
+\begin{document}
+
+% Some document settings
+\setlength\parindent{0pt}
+
+% Document preamble
+\title{1D ADCIRC Derivation}
+\author{Tristan Dyer}
+\maketitle
+
+% First section is the derivation of the SWE starting with the continuity equation
+\section{Continuity Equation}
+
+Start with the vertically integrated continuity equation:
+
+\begin{align*}
+	\ddt{H} + \ddx{}(UH) = 0	\eqlabel{eq0} \\
+\end{align*}
+
+where
+
+\begin{align*}
+	H		&\equiv	\zeta + h \\
+	\zeta	&=		\text{free surface departure from the geoid} \\
+	h 		&=		\text{bathymetric depth (distance from the geoid to the bottom)} \\
+	u 		&=		\text{vertically varying velocity in the x-direction} \\
+	U 		&=		\frac{1}{H}\int_{-h}^\zeta u \mathrm{d}z = \text{depth-averaged velocity in the x-direction} \\
+\end{align*}
+
+Take \(\partial/\partial t\) of \eqref{eq1}:
+
+\begin{align*}
+	\dddt{H} + \ddx{}\ddt{}(UH) = 0		\eqlabel{eq1} \\
+\end{align*}
+
+Add \eqref{eq1} to \eqref{eq0} multiplied by the parameter \(\tau_0\), which may be variable in space:
+
+\begin{align*}
+	\dddt{H} + \ddx{}\ddt{}(UH) + \tau_0\left(\ddt{H} + \ddx{}(UH)\right)	&= 0 \\\\
+	\dddt{H} + \ddx{}\ddt{}(UH) + \tau_0\ddt{H} + \tau_0\ddx{}(UH) 			&= 0 \\\\
+	\dddt{H} + \tau_0\ddt{H} + \tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH)			&= 0 \eqlabel{eq2} \\
+\end{align*}
+
+Now, define \(\Jx\):
+
+\begin{align*}
+	\Jx &\equiv \tau_0 (UH) + \ddt{}(UH) 	\eqlabel{eq3} \\\\
+	\Jx &=		\tau_0 Q + \ddt{Q} 			\eqlabel{eq4} \\\\
+	\intertext{where}
+	Q &= UH \\
+\end{align*}
+
+Recall that \(\tau_0\), \(U\), and \(H\) are all variable in \(x\) and take \(\partial/\partial x\) of \eqref{eq4}, noting the use of the product rule:
+
+\begin{align*}
+	\ddx{\Jx}	&= \ddx{}\left[\tau_0 Q + \ddt{Q}\right] \\\\
+				&= \ddx{}(\tau_0 Q) + \ddx{}\ddt{}Q \\\\
+				&= Q\ddx{\tau_0} + \tau_0\ddx{Q} + \ddx{}\ddt{}Q \\\\
+				&= \tau_0\ddx{Q} + \ddx{}\ddt{}Q + Q\ddx{\tau_0} \\\\
+				&= \tau_0\ddx{(UH)} + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0} \eqlabel{eq5} \\
+\end{align*}
+
+Now, returning to equation \eqref{eq2}, let's add zero to it in the form of:
+
+\begin{align*}
+	UH\ddx{\tau_0} - UH\ddx{\tau_0}	&= 0 \\\\
+	\dddt{H} +  \tau_0\ddt{H} +
+		\underbrace{\eqstrut{2.5ex}
+			\tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0}
+		}_\text{
+			Note that this is equivalent to \eqref{eq5}
+		} - 
+	UH\ddx{\tau_0} &= 0 \\
+\end{align*}
+
+and substituting \eqref{eq5} in gives us:
+
+\begin{align*}
+	\dddt{H} + \tau_0\ddt{H} + \ddx{\Jx} - UH\ddx{\tau_0} = 0 \eqlabel{eq6} \\
+\end{align*}
+
+If we assume that bathymetric depth is constant, then
+
+\begin{align*}
+	\ddt{H} &= \ddt{\zeta} \\\\
+	\dddt{H} &= \dddt{\zeta} \\
+\end{align*}
+
+and \eqref{eq6} can be rewritten as
+
+\begin{align*}
+	\dddt{\zeta} + \tau_0\ddt{\zeta} + \ddx{\Jx} - UH\ddx{\tau_0} = 0 \eqlabel{eq7} \\
+\end{align*}
+
+\end{document}

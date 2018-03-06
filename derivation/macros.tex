@@ -1,0 +1,37 @@
+% Define d/dt macro
+\newcommand{\ddt}[1] {
+	\frac{\partial #1}{\partial t}
+}
+
+% Define d2/dt macro
+\newcommand{\dddt}[1] {
+	\frac{\partial^2 #1}{\partial t^2}
+}
+
+% Define d/dx macro
+\newcommand{\ddx}[1] {
+	\frac{\partial #1}{\partial x}
+}
+
+% Define d2/dx macro
+\newcommand{\dddx}[1] {
+	\frac{\partial^2 #1}{\partial x^2}
+}
+
+% Define d/dxdt macro
+\newcommand{\ddxt}[1] {
+	\frac{\partial #1}{\partial x\partial t}
+}
+
+% Define Jx
+\newcommand{\Jx} {
+	\tilde{J}_x
+}
+
+% Helper for tagging equations in align* environments
+\newcommand{\eqlabel}[1] {
+	\stepcounter{equation}\tag{\theequation}\label{#1}
+}
+
+% Helper for creating larger struts. Useful with underbraces that are too close to equations
+\newcommand*\eqstrut[1]{\vrule width0pt height0pt depth#1\relax}
