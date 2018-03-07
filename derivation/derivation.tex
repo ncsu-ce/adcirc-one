@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{amsmath}
+\usepackage[margin=1in]{geometry}
 \input{macros.tex}
 
 \begin{document}
@@ -17,8 +18,9 @@
 
 Start with the vertically integrated continuity equation:
 
+% (1)
 \begin{align*}
-	\ddt{H} + \ddx{}(UH) = 0	\eqlabel{eq0} \\
+	\ddt{H} + \ddx{}(UH) = 0	\eqlabel{eq1} \\
 \end{align*}
 
 where
@@ -31,40 +33,44 @@ where
 	U 		&=		\frac{1}{H}\int_{-h}^\zeta u \mathrm{d}z = \text{depth-averaged velocity in the x-direction} \\
 \end{align*}
 
-Take \(\partial/\partial t\) of \eqref{eq1}:
+Take \(\partial/\partial t\) of \eqref{eq2}:
 
+% (2)
 \begin{align*}
-	\dddt{H} + \ddx{}\ddt{}(UH) = 0		\eqlabel{eq1} \\
+	\dddt{H} + \ddx{}\ddt{}(UH) = 0		\eqlabel{eq2} \\
 \end{align*}
 
-Add \eqref{eq1} to \eqref{eq0} multiplied by the parameter \(\tau_0\), which may be variable in space:
+Add \eqref{eq2} to \eqref{eq1} multiplied by the parameter \(\tau_0\), which may be variable in space:
 
+% (3)
 \begin{align*}
 	\dddt{H} + \ddx{}\ddt{}(UH) + \tau_0\left(\ddt{H} + \ddx{}(UH)\right)	&= 0 \\\\
 	\dddt{H} + \ddx{}\ddt{}(UH) + \tau_0\ddt{H} + \tau_0\ddx{}(UH) 			&= 0 \\\\
-	\dddt{H} + \tau_0\ddt{H} + \tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH)			&= 0 \eqlabel{eq2} \\
+	\dddt{H} + \tau_0\ddt{H} + \tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH)			&= 0 \eqlabel{eq3} \\
 \end{align*}
 
 Now, define \(\Jx\):
 
+% (4), (5)
 \begin{align*}
-	\Jx &\equiv \tau_0 (UH) + \ddt{}(UH) 	\eqlabel{eq3} \\\\
-	\Jx &=		\tau_0 Q + \ddt{Q} 			\eqlabel{eq4} \\\\
+	\Jx &\equiv \tau_0 (UH) + \ddt{}(UH) 	\eqlabel{eq4} \\\\
+	\Jx &=		\tau_0 Q + \ddt{Q} 			\eqlabel{eq5} \\\\
 	\intertext{where}
 	Q &= UH \\
 \end{align*}
 
-Recall that \(\tau_0\), \(U\), and \(H\) are all variable in \(x\) and take \(\partial/\partial x\) of \eqref{eq4}, noting the use of the product rule:
+Recall that \(\tau_0\), \(U\), and \(H\) are all variable in \(x\) and take \(\partial/\partial x\) of \eqref{eq5}, noting the use of the product rule:
 
+% (6)
 \begin{align*}
 	\ddx{\Jx}	&= \ddx{}\left[\tau_0 Q + \ddt{Q}\right] \\\\
 				&= \ddx{}(\tau_0 Q) + \ddx{}\ddt{}Q \\\\
 				&= Q\ddx{\tau_0} + \tau_0\ddx{Q} + \ddx{}\ddt{}Q \\\\
 				&= \tau_0\ddx{Q} + \ddx{}\ddt{}Q + Q\ddx{\tau_0} \\\\
-				&= \tau_0\ddx{(UH)} + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0} \eqlabel{eq5} \\
+				&= \tau_0\ddx{(UH)} + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0} \eqlabel{eq6} \\
 \end{align*}
 
-Now, returning to equation \eqref{eq2}, let's add zero to it in the form of:
+Now, returning to equation \eqref{eq3}, let's add zero to it in the form of:
 
 \begin{align*}
 	UH\ddx{\tau_0} - UH\ddx{\tau_0}	&= 0 \\\\
@@ -72,15 +78,16 @@ Now, returning to equation \eqref{eq2}, let's add zero to it in the form of:
 		\underbrace{\eqstrut{2.5ex}
 			\tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0}
 		}_\text{
-			Note that this is equivalent to \eqref{eq5}
+			Note that this is equivalent to \eqref{eq6}
 		} - 
 	UH\ddx{\tau_0} &= 0 \\
 \end{align*}
 
-and substituting \eqref{eq5} in gives us:
+and substituting \eqref{eq6} in gives us:
 
+% (7)
 \begin{align*}
-	\dddt{H} + \tau_0\ddt{H} + \ddx{\Jx} - UH\ddx{\tau_0} = 0 \eqlabel{eq6} \\
+	\dddt{H} + \tau_0\ddt{H} + \ddx{\Jx} - UH\ddx{\tau_0} = 0 \eqlabel{eq7} \\
 \end{align*}
 
 If we assume that bathymetric depth is constant, then
@@ -90,10 +97,11 @@ If we assume that bathymetric depth is constant, then
 	\dddt{H} &= \dddt{\zeta} \\
 \end{align*}
 
-and \eqref{eq6} can be rewritten as
+and \eqref{eq7} can be rewritten as
 
+% (8)
 \begin{align*}
-	\dddt{\zeta} + \tau_0\ddt{\zeta} + \ddx{\Jx} - UH\ddx{\tau_0} = 0 \eqlabel{eq7} \\
+	\dddt{\zeta} + \tau_0\ddt{\zeta} + \ddx{\Jx} - UH\ddx{\tau_0} = 0 \eqlabel{eq8} \\
 \end{align*}
 
 \end{document}
