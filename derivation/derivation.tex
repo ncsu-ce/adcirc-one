@@ -104,4 +104,61 @@ and \eqref{eq7} can be rewritten as
 	\dddt{\zeta} + \tau_0\ddt{\zeta} + \ddx{\Jx} - UH\ddx{\tau_0} = 0 \eqlabel{eq8} \\
 \end{align*}
 
+\subsection{Apply the weighted residual method}
+
+First, we'll define the inner product notation \(\inner{A}{B}\) as the integral over the domain \(\Omega\) of \(A\) and \(B\) multiplied together.
+
+\begin{align*}
+	\inner{A}{B} \equiv \int\limits_\Omega ABd\Omega
+\end{align*}
+
+We apply the weighted residual method to \eqref{eq8} by multiplying each term by a weighting function \(\phi_j\) and integrating over the horizontal computational domain \(\Omega\). Written using the inner product notation, we have
+
+% (9)
+\begin{align*}
+	\inner{\dddt{\zeta}}{\phi_j} + 
+	\inner{\tau_0\ddt{\zeta}}{\phi_j} +
+	\inner{\ddx{\Jx}}{\phi_j} -
+	\inner{UH\ddx{\tau_0}}{\phi_j} = 0 \eqlabel{eq9} \\
+\end{align*}
+
+The third term, which involves \(\Jx\), can be integrated using integration by parts. Recall that integration by parts is defined as
+
+\begin{align*}
+	\int udv = uv - \int vdu\\
+\end{align*}
+
+So looking at the third term from \eqref{eq9},
+
+\begin{align*}
+	\inner{\ddx{\Jx}}{\phi_j} = \int \phi_j \ddx{\Jx} dx \\
+\end{align*}
+
+we see that if
+
+\begin{align*}
+	u				&=	\phi_j 						&	v 				&= \Jx \\
+	\frac{du}{dx}	&=	\frac{d\phi_j}{dx} 			&	\frac{dv}{dx}	&= \frac{d\Jx}{dx} \\
+	du 				&=	\frac{d\phi_j}{dx} dx 		&	dv 				&= \frac{d\Jx}{dx}dx \\
+\end{align*}
+
+then we can use integration by parts, leaving us with
+
+% (10)
+\begin{align*}
+	\inner{\ddx{\Jx}}{\phi_j} 	&= \int \phi_j \ddx{\Jx} dx \\
+								&= \phi_j \Jx - \int \Jx \frac{d\phi_j}{dx} dx \\
+								&= \phi_j \Jx - \inner{\Jx}{\frac{d\phi_j}{dx}} \eqlabel{eq10} \\
+\end{align*}
+
+Substituting this back in to \eqref{eq8} gives us
+
+\begin{align*}
+	\inner{\dddt{\zeta}}{\phi_j} + 
+	\inner{\tau_0\ddt{\zeta}}{\phi_j} -
+	\inner{\Jx}{\frac{d\phi_j}{dx}} -
+	\inner{UH\ddx{\tau_0}}{\phi_j} +
+	\phi_j \Jx = 0
+\end{align*}
+
 \end{document}
