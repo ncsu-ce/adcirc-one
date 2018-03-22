@@ -14,7 +14,7 @@
 \maketitle
 
 % First section is the derivation of the SWE starting with the continuity equation
-\section{Continuity Equation}
+\section{Continuity Equation} \label{section-continuity}
 
 Start with the vertically integrated continuity equation:
 
@@ -33,7 +33,7 @@ where
 	U 		&=		\frac{1}{H}\int_{-h}^\zeta u \mathrm{d}z = \text{depth-averaged velocity in the x-direction} \\
 \end{align*}
 
-Take \(\partial/\partial t\) of \eqref{eq2}:
+Take \(\partial/\partial t\) of \eqref{eq1}:
 
 % (2)
 \begin{align*}
@@ -53,8 +53,8 @@ Now, define \(\Jx\):
 
 % (4), (5)
 \begin{align*}
-	\Jx &\equiv \tau_0 (UH) + \ddt{}(UH) 	\eqlabel{eq4} \\\\
-	\Jx &=		\tau_0 Q + \ddt{Q} 			\eqlabel{eq5} \\\\
+	\Jx &\equiv \ddt{}(UH) + \tau_0 UH	\eqlabel{eq4} \\\\
+	    &=		\ddt{Q} + \tau_0 Q		\eqlabel{eq5} \\\\
 	\intertext{where}
 	Q &= UH \\
 \end{align*}
@@ -104,7 +104,7 @@ and \eqref{eq7} can be rewritten as
 	\dddt{\zeta} + \tau_0\ddt{\zeta} + \ddx{\Jx} - UH\ddx{\tau_0} = 0 \eqlabel{eq8} \\
 \end{align*}
 
-\subsection{Apply the weighted residual method}
+\subsection{Apply the weighted residual method to arrive at the weak form}
 
 First, we'll define the inner product notation \(\inner{A}{B}\) as the integral over the domain \(\Omega\) of \(A\) and \(B\) multiplied together.
 
@@ -151,14 +151,96 @@ then we can use integration by parts, leaving us with
 								&= \phi_j \Jx - \inner{\Jx}{\frac{d\phi_j}{dx}} \eqlabel{eq10} \\
 \end{align*}
 
-Substituting this back in to \eqref{eq8} gives us
+Substituting this back in to \eqref{eq8} gives us the weak form
 
+% (11)
 \begin{align*}
 	\inner{\dddt{\zeta}}{\phi_j} + 
 	\inner{\tau_0\ddt{\zeta}}{\phi_j} -
 	\inner{\Jx}{\frac{d\phi_j}{dx}} -
 	\inner{UH\ddx{\tau_0}}{\phi_j} +
-	\phi_j \Jx = 0
+	\phi_j \Jx = 0 \eqlabel{eq11} \\
 \end{align*}
+
+\subsection{Complete the GWCE derivation}
+
+The GWCE derivation is completed by substituting the vertically-integrated momentum equations, in either conservative or non-conservative forms, into the weak form of the continuity equation \eqref{eq11}.\\
+
+We'll start with the non-conservative form of the vertically-integrated momentum equation. Note that this is the same equation we'll be using in Section \ref{section-momentum} to determine depth-averaged velocities.
+
+% (12)
+\begin{align*}
+	\ddt{U} + U\ddx{U} = -g\combinedbarotropic + \frac{\sstress}{H\rho_0} + \frac{\bstress}{H\rho_0} \eqlabel{eq12} \\
+\end{align*}
+
+This can be substitued in to equation \eqref{eq11} in the term that involves \(\Jx\). Let's recall the definition of \(\Jx\), as shown in \eqref{eq4}, and expand the derivative term using the chain rule:
+
+% (13)
+\begin{align*}
+	\Jx &\equiv \ddt{}(UH) + \tau_0 UH \\\\
+	    &=		H\ddt{U} + U\ddt{\zeta} + \tau_0 UH	\eqlabel{eq13} \\
+\end{align*}
+
+Now, lets rearrange \eqref{eq12} to isolate the first term.
+
+\begin{align*}
+	\ddt{U} = -U\ddx{U} -g\combinedbarotropic + \frac{\sstress}{H\rho_0} + \frac{\bstress}{H\rho_0} \\
+\end{align*}
+
+This can now be directly substituted in to \eqref{eq13} and simplified.
+
+% (14)
+\begin{align*}
+	\Jx &= H\left( -U\ddx{U} -g\combinedbarotropic + \frac{\sstress}{H\rho_0} + \frac{\bstress}{H\rho_0} \right) + U\ddt{\zeta} + \tau_0 UH \\\\
+		&= -UH\ddx{U} - gH\combinedbarotropic + \frac{\sstress}{\rho_0} + \frac{\bstress}{\rho_0} + U\ddt{\zeta} + \tau_0 UH \\\\
+		&= -Q_x\ddx{U} \underbrace{\eqstrut{2.5ex}- gH\ddx{\zeta}}_\text{*} - gH\ddx{[P_s/g\rho_0 + \alpha\eta_0]} + \frac{\sstress}{\rho_0} + \frac{\bstress}{\rho_0} + U\ddt{\zeta} + \tau_0 Q_x \eqlabel{eq14}\\
+\end{align*}
+
+Now take a look at the starred term in \eqref{eq14}, recalling that \(H = h + \zeta\).
+
+% (15)
+\begin{align*}
+	- gH\ddx{\zeta} &= -g(h + \zeta)\ddx{\zeta} \\\\
+					&= -gh\ddx{\zeta} - g\zeta\ddx{\zeta} \\\\
+					&= -gh\ddx{\zeta} - \frac{g}{2}\ddx{\zeta^2} \eqlabel{eq15}\\
+\end{align*}
+
+Note that to arrive at \eqref{eq15} from the previous step, the chain rule was used:
+
+\begin{align*}
+	\frac{du^2}{dx} &= u\frac{du}{dx} + u\frac{du}{dx} \\\\
+					&= 2u\frac{du}{dx} \\
+\end{align*}
+
+So now if we plug \eqref{eq15} back in to \eqref{eq14}, we get:
+
+% (16)
+\begin{align*}
+	\Jx = -Q_x\ddx{U} -gh\ddx{\zeta} - \frac{g}{2}\ddx{\zeta^2} - gH\ddx{[P_s/g\rho_0 + \alpha\eta_0]} + \frac{\sstress}{\rho_0} + \frac{\bstress}{\rho_0} + U\ddt{\zeta} + \tau_0 Q_x \eqlabel{eq16}\\
+\end{align*}
+
+We isolate the linear free surface gravity wave term to arrive at
+
+% (17)
+\begin{align*}
+	\Jx = J_x - gh\ddx{\zeta} \eqlabel{eq17}\\
+\end{align*}
+where
+\begin{align*}
+	J_x = -Q_x\ddx{U} - \frac{g}{2}\ddx{\zeta^2} - gH\ddx{[P_s/g\rho_0 + \alpha\eta_0]} + \frac{\sstress}{\rho_0} + \frac{\bstress}{\rho_0} + U\ddt{\zeta} + \tau_0 Q_x \\\\
+\end{align*}
+
+Finally, we substitute \eqref{eq17} in to \eqref{eq11}, leaving us with:
+
+\begin{align*}
+	\inner{\dddt{\zeta}}{\phi_j} + 
+	\inner{\tau_0\ddt{\zeta}}{\phi_j} +
+	\inner{gh\ddx{\zeta}}{\ddx{\phi_j}} = 
+	\inner{J_x}{\frac{d\phi_j}{dx}} +
+	\inner{Q_x\ddx{\tau_0}}{\phi_j} -
+	\phi_j \Jx \\
+\end{align*}
+
+\section{Momentum Equation} \label{section-momentum}
 
 \end{document}

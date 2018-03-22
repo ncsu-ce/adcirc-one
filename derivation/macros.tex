@@ -33,6 +33,22 @@
 	\left\langle #1, #2 \right\rangle
 }
 
+% Define the combined barotropic pressure (free surface elevation,
+% atmospheric pressure, and tidal potential)
+\newcommand{\combinedbarotropic} {
+	\ddx{[\zeta + P_s/g\rho_0 + \alpha\eta_0]}
+}
+
+% Define surface stress
+\newcommand{\sstress} {
+	\tau_{sx}
+}
+
+% Define bottom stress
+\newcommand{\bstress} {
+	\tau_{bx}
+}
+
 % Helper for tagging equations in align* environments
 \newcommand{\eqlabel}[1] {
 	\stepcounter{equation}\tag{\theequation}\label{#1}
