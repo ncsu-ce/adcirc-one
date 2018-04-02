@@ -21,6 +21,7 @@ a {
   }
 }
 
+
 header {
 
   display: flex;
@@ -53,6 +54,7 @@ header {
     display: flex;
     flex-direction: column;
     min-width: $main-width;
+    max-width: $main-width;
   }
 
 }

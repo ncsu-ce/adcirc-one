@@ -7,7 +7,8 @@ var equations = {
         'h 		&=		\\text{bathymetric depth (distance from the geoid to the bottom)} \\\\' +
         'u 		&=		\\text{vertically varying velocity in the x-direction} \\\\' +
         'U 		&=		\\frac{1}{H}\\int_{-h}^\\zeta u \\mathrm{d}z = \\text{depth-averaged velocity in the x-direction} \\\\' +
-        '\\end{aligned}'
+        '\\end{aligned}',
+    'e3': '\\dddt{H} + \\ddx{}\\ddt{}(UH) = 0'
 };
 
 var macros = {
