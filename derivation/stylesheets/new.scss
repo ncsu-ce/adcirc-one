@@ -1,0 +1,67 @@
+$full_width: 960px;
+$body_width: 720px;
+$line_height: 1.5em;
+
+$link_color: steelblue;
+$tag_color: #cccccc;
+
+$inset-color: #efefef;
+$inset-shadow-color: #dedede;
+
+body {
+  margin: 0 auto 4em auto;
+  position: relative;
+  width: $full_width;
+  line-height: $line_height;
+
+  > p {
+    width: $body_width;
+  }
+}
+
+a {
+  color: $link_color;
+  &:not(:hover) {
+    text-decoration: none;
+  }
+}
+
+aside {
+  position: absolute;
+  right: 0;
+  width: $full_width - $body_width;
+  font-size: small;
+}
+
+.eq-tag {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+  padding: 0 0.3em;
+}
+
+.tag-left {
+  position: absolute;
+  right: 100%;
+  padding: 0 0.3em;
+  color: $tag_color;
+}
+
+.tag-right {
+  position: absolute;
+  left: $body_width;
+  color: $tag_color;
+}
+
+.equation {
+  position: relative;
+  margin: 1.33em 0;
+}
+
+.inset {
+
+  background-color: $inset-color;
+  box-shadow: inset 0 8px 6px -6px $inset-shadow-color,
+              inset 0 -8px 6px -6px $inset-shadow-color;
+}
