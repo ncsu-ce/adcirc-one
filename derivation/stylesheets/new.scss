@@ -1,18 +1,33 @@
+@import url(//fonts.googleapis.com/css?family=PT+Serif|PT+Serif:b|PT+Serif:i|PT+Sans|PT+Sans:b);
+
+$font-stack: PT Serif, serif;
 $full_width: 960px;
 $body_width: 720px;
-$line_height: 1.5em;
+$aside_width: 180px;
+$line_height: 1.5;
 
+$background-color: white;
 $link_color: steelblue;
 $tag_color: #cccccc;
+$eq_tag_color: steelblue;
+
+$eq_tag_spacing: 2.67em;
+$expander_btn_spacing: 3*$eq_tag_spacing;
 
 $inset-color: #efefef;
 $inset-shadow-color: #dedede;
 
+$expander_btn_color: $inset-shadow-color;
+$expander_btn_hover_color: steelblue;
+
 body {
+  font: 100% $font-stack;
   margin: 0 auto 4em auto;
   position: relative;
   width: $full_width;
   line-height: $line_height;
+  overflow-x: hidden;
+  background-color: $background-color;
 
   > p {
     width: $body_width;
@@ -26,11 +41,18 @@ a {
   }
 }
 
+h1, h2, h3 {
+  text-rendering: optimizeLegibility;
+}
+
 aside {
+  display: inline-block;
   position: absolute;
   right: 0;
-  width: $full_width - $body_width;
+  width: $aside_width;
   font-size: small;
+  margin-top: 0.3em;
+  line-height: normal;
 }
 
 .eq-tag {
@@ -38,19 +60,19 @@ aside {
   top: 50%;
   right: 100%;
   transform: translateY(-50%);
-  padding: 0 0.3em;
+  padding: 0 $eq_tag_spacing;
+
+  font-weight: bold;
+  font-size: 1.21em;
+
+  color: $eq_tag_color;
+  text-decoration: none !important;
 }
 
-.tag-left {
+.tag {
   position: absolute;
   right: 100%;
   padding: 0 0.3em;
-  color: $tag_color;
-}
-
-.tag-right {
-  position: absolute;
-  left: $body_width;
   color: $tag_color;
 }
 
@@ -61,7 +83,40 @@ aside {
 
 .inset {
 
+  position: relative;
+  overflow: hidden;
+  margin: 1.5em -50%;
+  padding: 0 50% 0 50%;
+  border-top: 1px solid $inset-shadow-color;
   background-color: $inset-color;
   box-shadow: inset 0 8px 6px -6px $inset-shadow-color,
               inset 0 -8px 6px -6px $inset-shadow-color;
+
+  > p {
+    width: $body_width;
+  }
+
+  aside {
+    margin-right: 25%;
+    &:first-child {
+      margin-top: 1.5em;
+    }
+  }
+
+}
+
+.expander {
+  .expander-button {
+    position: absolute;
+    z-index: 9999;
+    transform: translate(-$expander_btn_spacing, -50%);
+    color: $expander_btn_color;
+    .background {
+      color: $background-color;
+    }
+    &:hover {
+      cursor: pointer;
+      color: $expander_btn_hover_color;
+    }
+  }
 }

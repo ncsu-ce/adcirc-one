@@ -7,86 +7,77 @@
     <link rel="stylesheet" href="stylesheets/new.css">
     <link rel="stylesheet" href="lib/katex/katex.min.css">
 
+    <script defer src="lib/fontawesome/js/fa-solid.min.js"></script>
+    <script defer src="lib/fontawesome/js/fontawesome.min.js"></script>
     <script src="lib/katex/katex.min.js"></script>
-    <script src="lib/d3/d3.min.js"></script>
+    <script src="lib/d3/d3.js"></script>
 
 </head>
 <body>
 
 <h1>
-    <a class="tag-left" href="#">#</a>
+    <a class="tag" name="Section 1">#</a>
     This is a header
 </h1>
 
 <aside>
     This is some text in an aside.
 </aside>
-
 <p>
-    This is some text and it is really long so that hopefully it will need to be wrapped to the next line. \(\partial /\partial t\) This is some text and it is really long so that hopefully it will need to be wrapped to the next \(\partial /\partial t\) line.
+    This is some text and it is really <cite>[citation]</cite> long so that hopefully it will need to be wrapped to the next line. \(\partial /\partial t\) This is some text and it is really long so that hopefully it will need to be wrapped to the next \(\partial /\partial t\) line.
 </p>
 
 <h2>
-    <a class="tag-left" href="#">#</a>
+    <a class="tag" href="#">#</a>
     This is a smaller header
 </h2>
 
 <aside>
-    Another aside.
+    Another aside. This time with a reference to equation <a data-tag="eq1"></a>.
 </aside>
 
 <p>
-    This is some text and it is really long so that hopefully it will need to be wrapped to the next line. <a class="tag-left" href="#">#</a>This is some text and it is really long so that hopefully it will need to be wrapped to the next line.
+    This is some text and it is really <a data-tag="eq1"></a> long so that hopefully it will need to be reference to <a data-tag="Section 1"></a> wrapped to the next line. <a class="tag" href="#">#</a>This is some text and it is really long so that hopefully it will need to be wrapped to the next line.
 </p>
 
 
-<div class="equation" data-tag="1">
+<div class="equation" data-tag="eq1">
     \frac{\partial}{\partial t} = \frac{\partial}{\partial t}
     \frac{\partial}{\partial t} = \frac{\partial}{\partial t}
 </div>
 
 <p>
-    This is some text and it is really long so that hopefully it will need to be wrapped to the next line. <a class="tag-left" href="#">#</a>This is some text and it is really long so that hopefully it will need to be wrapped to the next line.
+    This is some text and it is really long so that hopefully it will need to be wrapped to the next line. <a class="tag" href="#">#</a>This is some text and it is really long so that hopefully it will need to be wrapped to the next line.
 </p>
 
-<script>
+<div class="inset" id="inset">
 
-    d3.selectAll('.equation')
-        .each(render_block);
+    <aside>
+        This is a test.
+    </aside>
+    <p>
+        This is some text and it is really long so that hopefully it will need to be wrapped to the next line. <a class="tag" href="#">#</a>This is some text and it is really long so that hopefully it will need to be wrapped to the next line.
+    </p>
+    <div class="equation" data-tag="eq2">
+        \frac{\partial}{\partial t} = \frac{\partial}{\partial t}
+        \frac{\partial}{\partial t} = \frac{\partial}{\partial t}
+    </div>
 
-    d3.selectAll('p')
-        .each(render_inline);
+    <aside>
+        This is a test.
+    </aside>
 
-    function render_block () {
+    <p>
+        This is some text and it is really long so that hopefully it will need to be wrapped to the next line. <a class="tag" href="#">#</a>This is some text and it is really long so that hopefully it will need to be wrapped to the next line.
+    </p>
 
-        var div = d3.select(this);
-        var tag = div.attr('data-tag');
-        var text = div.text().trim().replace('\n', ' \\\\ ');
-        var block = '\\begin{aligned}' + text + '\\end{aligned}';
-        katex.render(block, div.node(), { displayMode: true });
-        if (tag) {
-            div.insert('div', ':first-child')
-                .classed('eq-tag', true)
-                .text(tag);
-        }
+</div>
 
-    }
+<p>
+    More text.
+</p>
 
-    function render_inline () {
-
-        var selection = d3.select(this);
-        var text = selection.html();
-        var regex = /\\\((.*?)\\\)/g;
-
-        text = text.replace(regex, function (something) {
-            return katex.renderToString(something.slice(2, -2));
-        });
-
-        selection.html(text);
-
-    }
-
-</script>
+<script src="new.js"></script>
 
 </body>
 </html>
