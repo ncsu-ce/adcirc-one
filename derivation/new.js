@@ -8,6 +8,8 @@ d3.selectAll('.equation')
 
 d3.selectAll('p')
     .each(render_inline);
+d3.selectAll('li')
+    .each(render_inline);
 
 // Generate tags
 d3.selectAll('.equation')
@@ -86,8 +88,7 @@ function generate_tag () {
 function render_block () {
 
     var div = d3.select(this);
-    var tag = div.attr('data-tag');
-    var text = div.text().trim().replace('\n', ' \\\\ ');
+    var text = div.text().trim();
     var block = '\\begin{aligned}' + text + '\\end{aligned}';
     katex.render(block, div.node(), { displayMode: true });
 
@@ -124,7 +125,8 @@ d3.selectAll('.inset')
         // Add the icons to the expander button
         button.append('i')
             .attr('class', 'fas fa-circle background')
-            .attr('data-fa-transform', 'grow-8');
+            .attr('data-fa-transform', 'grow-18')
+            .style('filter', 'drop-shadow(0 0.25em 2px #dedede)');
         button.append('i')
             .attr('class', 'fas fa-minus-circle');
 
@@ -141,17 +143,16 @@ d3.selectAll('.inset')
         button.on('click', function () {
 
             var fold_time = 500;
-            var inset = d3.select('#inset');
             var height = null;
 
             if (!collapsed) {
 
                 // Get the computed height of the div
-                height = inset.style('height');
-                inset.datum(height);
+                height = div.style('height');
+                div.datum(height);
 
                 // Collapse the div
-                inset.style('height', height)
+                div.style('height', height)
                     .transition(fold_time)
                     .style('height', '0px');
 
@@ -160,13 +161,18 @@ d3.selectAll('.inset')
                     .classed('fa-minus-circle', false)
                     .classed('fa-plus-circle', true);
 
+                // Remove the drop shadow
+                button.selectAll('.background')
+                    .style('filter', null);
+                console.log(button);
+
             } else {
 
                 // Get the height from before the div was collapsed
-                height = inset.datum();
+                height = div.datum();
 
                 // Expand the div
-                inset.style('height', '0px')
+                div.style('height', '0px')
                     .transition(fold_time)
                     .style('height', height);
 
@@ -174,6 +180,9 @@ d3.selectAll('.inset')
                 button.selectAll('.fa-plus-circle')
                     .classed('fa-plus-circle', false)
                     .classed('fa-minus-circle', true);
+
+                button.selectAll('.background')
+                    .style('filter', 'drop-shadow(0 0.25em 2px #dedede)')
 
             }
 
@@ -183,3 +192,5 @@ d3.selectAll('.inset')
 
 
     });
+
+hljs.initHighlightingOnLoad();

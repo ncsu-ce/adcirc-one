@@ -1,22 +1,40 @@
 @import url(//fonts.googleapis.com/css?family=PT+Serif|PT+Serif:b|PT+Serif:i|PT+Sans|PT+Sans:b);
 body {
   font: 100% PT Serif, serif;
+  color: #333;
   margin: 0 auto 4em auto;
   position: relative;
   width: 960px;
   line-height: 1.5;
   overflow-x: hidden;
-  background-color: white; }
-  body > p {
-    width: 720px; }
+  background-color: white;
+}
+body > p {
+  width: 720px;
+}
+body > .equation {
+  width: 720px;
+}
+body > pre {
+  margin: 2em 0 2em -20px;
+  border-left: 2px solid #cccccc;
+  padding-left: 18px;
+}
+body > pre > code {
+  padding: 0 !important;
+}
 
 a {
-  color: steelblue; }
-  a:not(:hover) {
-    text-decoration: none; }
+  color: steelblue;
+}
+a:not(:hover) {
+  text-decoration: none;
+}
 
 h1, h2, h3 {
-  text-rendering: optimizeLegibility; }
+  text-rendering: optimizeLegibility;
+  color: #000;
+}
 
 aside {
   display: inline-block;
@@ -25,51 +43,72 @@ aside {
   width: 180px;
   font-size: small;
   margin-top: 0.3em;
-  line-height: normal; }
+  line-height: normal;
+}
 
 .eq-tag {
   position: absolute;
   top: 50%;
-  right: 100%;
-  transform: translateY(-50%);
-  padding: 0 2.67em;
-  font-weight: bold;
+  transform: translate(-50%, -50%) translateX(-60px);
   font-size: 1.21em;
   color: steelblue;
-  text-decoration: none !important; }
+  text-decoration: none !important;
+}
 
 .tag {
   position: absolute;
   right: 100%;
   padding: 0 0.3em;
-  color: #cccccc; }
+  color: #cccccc;
+}
 
 .equation {
   position: relative;
-  margin: 1.33em 0; }
+  margin: 1.33em 0;
+}
 
 .inset {
   position: relative;
   overflow: hidden;
   margin: 1.5em -50%;
   padding: 0 50% 0 50%;
-  border-top: 1px solid #dedede;
+  border-top: 1px solid #efefef;
   background-color: #efefef;
-  box-shadow: inset 0 8px 6px -6px #dedede, inset 0 -8px 6px -6px #dedede; }
-  .inset > p {
-    width: 720px; }
-  .inset aside {
-    margin-right: 25%; }
-    .inset aside:first-child {
-      margin-top: 1.5em; }
+  box-shadow: inset 0 8px 6px -6px #dedede, inset 0 -8px 6px -6px #dedede;
+}
+.inset > p {
+  width: 720px;
+}
+.inset > .equation {
+  width: 720px;
+}
+.inset aside {
+  margin-right: 25%;
+}
+.inset aside:first-child {
+  margin-top: 1.5em;
+}
 
 .expander .expander-button {
   position: absolute;
   z-index: 9999;
-  transform: translate(-8.01em, -50%);
-  color: #dedede; }
-  .expander .expander-button .background {
-    color: white; }
-  .expander .expander-button:hover {
-    cursor: pointer;
-    color: steelblue; }
+  transform: translate(-50%, -50%) translateX(-60px);
+  color: #dedede;
+}
+.expander .expander-button .background {
+  color: white;
+}
+.expander .expander-button:hover {
+  cursor: pointer;
+  color: steelblue;
+}
+
+:not(.katex-display) > span.katex {
+  font-size: inherit;
+}
+
+pre, code {
+  font-family: "Menlo", monospace;
+  font-size: 14px;
+  line-height: normal;
+}

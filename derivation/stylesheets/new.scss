@@ -1,6 +1,8 @@
 @import url(//fonts.googleapis.com/css?family=PT+Serif|PT+Serif:b|PT+Serif:i|PT+Sans|PT+Sans:b);
 
 $font-stack: PT Serif, serif;
+$header-color: #000;
+$text-color: #333;
 $full_width: 960px;
 $body_width: 720px;
 $aside_width: 180px;
@@ -11,8 +13,8 @@ $link_color: steelblue;
 $tag_color: #cccccc;
 $eq_tag_color: steelblue;
 
-$eq_tag_spacing: 2.67em;
-$expander_btn_spacing: 3*$eq_tag_spacing;
+$eq_tag_spacing: 60px;
+$expander_btn_spacing: $eq_tag_spacing;
 
 $inset-color: #efefef;
 $inset-shadow-color: #dedede;
@@ -22,6 +24,7 @@ $expander_btn_hover_color: steelblue;
 
 body {
   font: 100% $font-stack;
+  color: $text-color;
   margin: 0 auto 4em auto;
   position: relative;
   width: $full_width;
@@ -31,6 +34,21 @@ body {
 
   > p {
     width: $body_width;
+  }
+
+  > .equation {
+    width: $body_width;
+  }
+
+  > pre {
+    margin: 2em 0 2em -20px;
+    border-left: 2px solid $tag_color;
+    padding-left: 18px;
+
+    > code {
+      padding: 0 !important;
+    }
+
   }
 }
 
@@ -43,6 +61,7 @@ a {
 
 h1, h2, h3 {
   text-rendering: optimizeLegibility;
+  color: $header-color;
 }
 
 aside {
@@ -58,11 +77,10 @@ aside {
 .eq-tag {
   position: absolute;
   top: 50%;
-  right: 100%;
-  transform: translateY(-50%);
-  padding: 0 $eq_tag_spacing;
+  //right: 100%;
+  transform: translate(-50%, -50%) translateX(-$eq_tag_spacing);
+  //margin: 0 $eq_tag_spacing 0 0;
 
-  font-weight: bold;
   font-size: 1.21em;
 
   color: $eq_tag_color;
@@ -87,12 +105,16 @@ aside {
   overflow: hidden;
   margin: 1.5em -50%;
   padding: 0 50% 0 50%;
-  border-top: 1px solid $inset-shadow-color;
+  border-top: 1px solid $inset-color;
   background-color: $inset-color;
   box-shadow: inset 0 8px 6px -6px $inset-shadow-color,
               inset 0 -8px 6px -6px $inset-shadow-color;
 
   > p {
+    width: $body_width;
+  }
+
+  > .equation {
     width: $body_width;
   }
 
@@ -109,14 +131,27 @@ aside {
   .expander-button {
     position: absolute;
     z-index: 9999;
-    transform: translate(-$expander_btn_spacing, -50%);
+    //right: 100%;
+    transform: translate(-50%, -50%) translateX(-$expander_btn_spacing);
     color: $expander_btn_color;
+
     .background {
       color: $background-color;
     }
+
     &:hover {
       cursor: pointer;
       color: $expander_btn_hover_color;
     }
   }
+}
+
+:not(.katex-display) > span.katex {
+  font-size: inherit;
+}
+
+pre, code {
+  font-family: "Menlo", monospace;
+  font-size: 14px;
+  line-height: normal;
 }
