@@ -25,7 +25,7 @@ $expander_btn_hover_color: steelblue;
 body {
   font: 100% $font-stack;
   color: $text-color;
-  margin: 0 auto 4em auto;
+  margin: 0 auto;
   position: relative;
   width: $full_width;
   line-height: $line_height;
@@ -154,4 +154,46 @@ pre, code {
   font-family: "Menlo", monospace;
   font-size: 14px;
   line-height: normal;
+}
+
+header {
+  position: relative;
+  overflow: hidden;
+  margin: 0 -50% 1.5em -50%;
+  padding: 20px 50% 20px 50%;
+  border-top: 1px solid $inset-color;
+  background-color: $inset-color;
+  box-shadow: inset 0 -8px 6px -6px $inset-shadow-color;
+  h1 {
+    margin: 0;
+    font-size: 42px;
+  }
+  .left {
+    float: left;
+  }
+  .right {
+    float: right;
+  }
+  .icon {
+    padding-left: 10px;
+  }
+}
+
+footer {
+  position: relative;
+  overflow: hidden;
+  margin: 1.5em -50% 0 -50%;
+  padding: 20px 50% 80px 50%;
+  border-top: 1px solid $inset-color;
+  background-color: $inset-color;
+  box-shadow: inset 0 8px 6px -6px $inset-shadow-color;
+  .left {
+    float: left;
+  }
+  .right {
+    float: right;
+  }
+  .icon {
+    padding-left: 10px;
+  }
 }
