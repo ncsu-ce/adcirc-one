@@ -1,90 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <title>ADCIRC 1D - Derivation</title>
 
-    <link rel="stylesheet" href="stylesheets/index.css">
-    <link rel="stylesheet" href="lib/katex/katex.min.css">
+    <link rel="stylesheet" href="tex-site/stylesheets/index.css">
+    <link rel="stylesheet" href="tex-site/lib/katex/katex.min.css">
+    <link rel="stylesheet" href="tex-site/lib/highlight/styles/github-gist.css">
 
-    <script defer src="lib/fontawesome/js/fa-brands.min.js"></script>
-    <script defer src="lib/fontawesome/js/fontawesome.min.js"></script>
-    <script src="lib/katex/katex.min.js"></script>
-    <script src="lib/d3/d3.min.js"></script>
+    <script defer src="tex-site/lib/fontawesome/js/fa-solid.min.js"></script>
+    <script defer src="tex-site/lib/fontawesome/js/fa-brands.min.js"></script>
+    <script defer src="tex-site/lib/fontawesome/js/fontawesome.min.js"></script>
+    <script src="tex-site/lib/highlight/highlight.pack.js"></script>
+    <script src="tex-site/lib/katex/katex.min.js"></script>
+    <script src="tex-site/lib/d3/d3.js"></script>
+    <script src="tex-site/index.js"></script>
 
 </head>
 <body>
 
 <header>
-    <h1>1D ADCIRC Derivation</h1>
-    <h1><a href="https://github.com/ncsu-ce/adcirc-one"><i class="fab fa-github"></i></a></h1>
+    <h1>1D ADCIRC Derivation
+        <i class="right">
+            <a class="icon" href="https://github.com/ncsu-ce/adcirc-one"><i class="fab fa-xs fa-github"></i></a>
+        </i>
+    </h1>
 </header>
 
-<div class="block">
-    <div class="body">
-        <p>
-            The following page contains the derivation and implementation of a 1-dimensional version of
-            <a href="https://adcirc.org">ADCIRC</a>. The purpose of this exercise is threefold:
-        </p>
-        <ul>
-            <li>
-                Create a simplified version of ADCIRC that can be used to quickly and easily test new features that
-                may eventually be implemented in ADCIRC itself. For example, we will use this implementation to
-                explore the coupling of shallow water models with short wave and SPH (smooth particle hydrodynamics)
-                models.
-            </li>
-            <li>
-                Provide a deeper understanding of ADCIRC, the shallow water equations, and finite element analysis in
-                general. I have yet to find an extremely thorough 1D finite element derivation that uses the shallow
-                water equations, so I hope to fill that gap. Additionally, I am approaching this problem as an
-                engineering student who has been through a number of finite element analysis courses, finding some
-                aspects straightforward, and others challenging. My hope is that anybody else who discovers this page
-                will find something to further their understanding. This includes myself, when I inevitably return
-                to finite elements from working on another project and find myself having forgotten most of the details.
-            </li>
-            <li>
-                I know there's another one, I can't really remember it right now, though.
-            </li>
-        </ul>
-        <p>
-            It may prove beneficial to follow along with the actual
-            <a href="http://www.unc.edu/ims/adcirc/adcirc_theory_2004_12_08.pdf">ADCIRC Theory Report and Formulation</a>
-            document as you work through this page. I try to follow it closely, filling in gaps where they leave steps
-            to the reader and, obviously, switching things to one dimension instead of two.
-        </p>
-    </div>
+<p>
+    The following page contains the derivation and implementation of a 1-dimensional version of
+    <a href="https://adcirc.org">ADCIRC</a>. The purpose of this exercise is threefold:
+</p>
+<div>
+    <ul>
+        <li>
+            Create a simplified version of ADCIRC that can be used to quickly and easily test new features that
+            may eventually be implemented in ADCIRC itself. For example, we will use this implementation to
+            explore the coupling of shallow water models with short wave and SPH (smooth particle hydrodynamics)
+            models.
+        </li>
+        <li>
+            Provide a deeper understanding of ADCIRC, the shallow water equations, and finite element analysis in
+            general. I have yet to find an extremely thorough 1D finite element derivation that uses the shallow
+            water equations, so I hope to fill that gap. Additionally, I am approaching this problem as an
+            engineering student who has been through a number of finite element analysis courses, finding some
+            aspects straightforward, and others challenging. My hope is that anybody else who discovers this page
+            will find something to further their understanding. This includes myself, when I inevitably return
+            to finite elements from working on another project and find myself having forgotten most of the details.
+        </li>
+        <li>
+            I know there's another one, I can't really remember it right now, though.
+        </li>
+    </ul>
+</div>
+<p>
+    It may prove beneficial to follow along with the actual
+    <a href="http://www.unc.edu/ims/adcirc/adcirc_theory_2004_12_08.pdf">ADCIRC Theory Report and Formulation</a>
+    document as you work through this page. I try to follow it closely, filling in gaps where they leave steps
+    to the reader and, obviously, switching things to one dimension instead of two.
+</p>
+
+<h1>
+    <a class="tag" name="section-continuity-equation">#</a>
+    Continuity Equation
+</h1>
+
+<p>
+    Start with the vertically integrated continuity equation.
+</p>
+
+<div class="equation" data-tag="continuity">
+    \ddt{H} + \ddx{}(UH) = 0
+</div>
+<p>
+    where
+</p>
+<div class="equation">
+    H		&\equiv	\zeta + h \\
+	\zeta	&=		\text{free surface departure from the geoid} \\
+	h 		&=		\text{bathymetric depth (distance from the geoid to the bottom)} \\
+	u 		&=		\text{vertically varying velocity in the x-direction} \\
+	U 		&=		\frac{1}{H}\int_{-h}^\zeta u \mathrm{d}z = \text{depth-averaged velocity in the x-direction} \\
+</div>
+<p>
+    Take \(\partial/\partial t\) of <a data-tag="continuity"></a>
+</p>
+<div class="equation" data-tag="dcontinuity">
+    \dddt{H} + \ddx{}\ddt{}(UH) = 0
+</div>
+<p>
+    Add <a data-tag="dcontinuity"></a> to <a data-tag="continuity"></a> multiplied by the parameter \(\tau_0\), which may be variable in space:
+</p>
+<div class="equation">
+    \dddt{H} + \ddx{}\ddt{}(UH) + \tau_0\left(\ddt{H} + \ddx{}(UH)\right)	&= 0 \\\\
+	\dddt{H} + \ddx{}\ddt{}(UH) + \tau_0\ddt{H} + \tau_0\ddx{}(UH) 			&= 0 \\\\
+	\dddt{H} + \tau_0\ddt{H} + \tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH)			&= 0
+</div>
+<p>
+    Now, define \(\Jx\):
+</p>
+<div class="equation">
+    \Jx &\equiv \ddt{}(UH) + \tau_0 UH	\\\\
+	    &=		\ddt{Q} + \tau_0 Q		\\\\
+</div>
+<p>where</p>
+<div class="equation">
+	Q &= UH
+</div>
+<aside>
+    Recall that the <a href="https://en.wikipedia.org/wiki/Product_rule">product rule</a> can be used to find the derivatives of products of two (or more) functions.
+</aside>
+<p>
+    Recall that \(\tau_0\), \(U\), and \(H\) are all variable in \(x\) and take \(\partial/\partial x\) of \eqref{eq5}, noting the use of the product rule:
+</p>
+<div class="equation">
+    \ddx{\Jx}	&= \ddx{}\left[\tau_0 Q + \ddt{Q}\right] \\\\
+            &= \ddx{}(\tau_0 Q) + \ddx{}\ddt{}Q \\\\
+            &= Q\ddx{\tau_0} + \tau_0\ddx{Q} + \ddx{}\ddt{}Q \\\\
+            &= \tau_0\ddx{Q} + \ddx{}\ddt{}Q + Q\ddx{\tau_0} \\\\
+            &= \tau_0\ddx{(UH)} + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0} \\
+</div>
+<p>
+    Now, returning to equation \eqref{eq3}, let's add zero to it in the form of:
+</p>
+<div class="equation">
+    UH\ddx{\tau_0} - UH\ddx{\tau_0}	&= 0 \\\\
+	\dddt{H} +  \tau_0\ddt{H} +
+		\underbrace{
+			\tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0}
+		}_{
+            \text{Note that this is equivalent to } \href{#}{\text{3}}
+    } -
+	UH\ddx{\tau_0} &= 0 \\
+</div>
+<p>
+    and substituting \eqref{eq6} in gives us:
+</p>
+<div class="equation">
+    \dddt{H} + \tau_0\ddt{H} + \ddx{\Jx} - UH\ddx{\tau_0} = 0
 </div>
 
-<div class="block">
-    <div class="body">
-        <h1>Continuity Equation</h1>
-        Start with the vertically integrated continuity equation.
-    </div>
-</div>
+<script>
 
-<div class="block inset">
-    <div class="body">
-        <div id="e1"></div>
-        where
-        <div id="e2"></div>
-    </div>
-</div>
+    var macros = {
+        '\\ddt': '\\frac{\\partial #1}{\\partial t}',
+        '\\dddt': '\\frac{\\partial^2 #1}{\\partial t^2}',
+        '\\ddx': '\\frac{\\partial #1}{\\partial x}',
+        '\\dddx': '\\frac{\\partial^2 #1}{\\partial x^2}',
+        '\\ddxt': '\\frac{\\partial #1}{\\partial x\\partial t}',
+        '\\Jx': '\\tilde{J}_x'
+    };
 
-<div class="block">
-    <div class="body">
-        <p>
-            Take the partial derivative of this equation with respect to time.
-        </p>
-    </div>
-</div>
+    build_tex_site(macros);
 
-<div class="block inset">
-    <div class="body">
-        <div id="e3"></div>
-    </div>
-</div>
-
-<script src="index.js"></script>
+</script>
 
 </body>
 </html>
