@@ -11,9 +11,15 @@ num_nodes = num_elements + 1
 element_width = width / num_elements
 
 # Solve
+
+# x-coordinates of nodes
 x = np.linspace(0, width, num=num_nodes, endpoint=True)
-h = np.ones(num_nodes)
-H = np.ones(num_nodes)
+
+# Initialize depth to one meter
+h = np.ones(num_nodes)          # bathymetric depth
+zeta = np.zeros(num_nodes)      # free-surface departure from geoid
+H = h + zeta                    # total water column thickness
+
 K = np.zeros((num_nodes, num_nodes))
 M = np.zeros((num_nodes, num_nodes))
 F = np.zeros((num_nodes, num_nodes))
@@ -40,4 +46,5 @@ for node in range(num_nodes):
         K[node][node+1] += g * h_bar_r
 
 
-print(K)
+print(x)
+print(H)
