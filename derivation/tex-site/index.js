@@ -30,6 +30,7 @@ function build_tex_site (macros) {
         var a = d3.select(this);
         var tag = a.attr('data-tag');
 
+        // Create tag written by the author
         if (tag) {
 
             a.attr('href', '#' + tag)
@@ -43,6 +44,31 @@ function build_tex_site (macros) {
             // Reference tag for equation
             if (tag in equations) {
                 a.text('(' + equations[tag] + ')');
+            }
+
+        }
+
+        // Create tag embedded in an equation
+        var embed = a.selectAll('span');
+        if (embed.size() > 0) {
+
+            var href = a.attr('href').slice(1);
+
+            if (href in equations) {
+
+                embed.remove();
+
+                // Bring to the surface to make clickable
+                a.style('position', 'relative')
+                    .style('z-index', 9999);
+
+                // Create text from href link
+                a.append('span')
+                    .attr('class', 'mord text mtight')
+                    .append('span')
+                    .attr('class', 'mord mtight')
+                    .text('(' + equations[href] + ')');
+
             }
 
         }
@@ -101,13 +127,6 @@ function build_tex_site (macros) {
                 macros: macros
             }
         );
-
-        div.selectAll('a')
-            .each(function () {
-                d3.select(this)
-                    .style('position', 'relative')
-                    .style('z-index', 9999);
-            });
 
     }
 

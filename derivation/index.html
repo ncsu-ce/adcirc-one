@@ -50,7 +50,12 @@
             to finite elements from working on another project and find myself having forgotten most of the details.
         </li>
         <li>
-            I know there's another one, I can't really remember it right now, though.
+            Explore scientific software design and validation. We'll be building a Python implementation of 1D ADCIRC,
+            starting with an extremely simple script that can solve a single, basic problem. From there we will add
+            features that allow us to solve larger and more complex problems, and along the way we will be using
+            <a href="http://alloytools.org/">Alloy</a> to analyze our program structure. At the very core, we want
+            to be able to verify that as we introduce complexity to our code, we are still solving the same algebraic
+            system of equations that we will have derived.
         </li>
     </ul>
 </div>
@@ -70,7 +75,7 @@
     Start with the vertically integrated continuity equation.
 </p>
 
-<div class="equation" data-tag="continuity">
+<div class="equation" data-tag="1">
     \ddt{H} + \ddx{}(UH) = 0
 </div>
 <p>
@@ -84,18 +89,41 @@
 	U 		&=		\frac{1}{H}\int_{-h}^\zeta u \mathrm{d}z = \text{depth-averaged velocity in the x-direction} \\
 </div>
 <p>
-    Take \(\partial/\partial t\) of <a data-tag="continuity"></a>
+    Take \(\partial/\partial t\) of <a data-tag="1"></a>
 </p>
-<div class="equation" data-tag="dcontinuity">
+<div class="equation" data-tag="2">
     \dddt{H} + \ddx{}\ddt{}(UH) = 0
 </div>
 <p>
-    Add <a data-tag="dcontinuity"></a> to <a data-tag="continuity"></a> multiplied by the parameter \(\tau_0\), which may be variable in space:
+    Add <a data-tag="2"></a> to <a data-tag="1"></a> multiplied by the parameter \(\tau_0\), which may be variable in space:
 </p>
 <div class="equation">
-    \dddt{H} + \ddx{}\ddt{}(UH) + \tau_0\left(\ddt{H} + \ddx{}(UH)\right)	&= 0 \\\\
-	\dddt{H} + \ddx{}\ddt{}(UH) + \tau_0\ddt{H} + \tau_0\ddx{}(UH) 			&= 0 \\\\
-	\dddt{H} + \tau_0\ddt{H} + \tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH)			&= 0
+    \underbrace{
+        \dddt{H} + \ddx{}\ddt{}(UH)
+    }_{
+        \href{#2}{()}
+    }
+     + \tau_0
+
+    \underbrace{
+        \left(\ddt{H} + \ddx{}(UH)\right)
+    }_{
+        \href{#1}{()}\vphantom{\qquad}
+    }
+
+    	= 0
+</div>
+<p>
+    Multiplying the \(\tau_0\) term through:
+</p>
+<div class="equation">
+	\dddt{H} + \ddx{}\ddt{}(UH) + \tau_0\ddt{H} + \tau_0\ddx{}(UH) 			= 0 \\
+</div>
+<p>
+    Rearranging:
+</p>
+<div class="equation" data-tag="3">
+	\dddt{H} + \tau_0\ddt{H} + \tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH)			= 0
 </div>
 <p>
     Now, define \(\Jx\):
@@ -114,12 +142,12 @@
 <p>
     Recall that \(\tau_0\), \(U\), and \(H\) are all variable in \(x\) and take \(\partial/\partial x\) of \eqref{eq5}, noting the use of the product rule:
 </p>
-<div class="equation">
-    \ddx{\Jx}	&= \ddx{}\left[\tau_0 Q + \ddt{Q}\right] \\\\
-            &= \ddx{}(\tau_0 Q) + \ddx{}\ddt{}Q \\\\
-            &= Q\ddx{\tau_0} + \tau_0\ddx{Q} + \ddx{}\ddt{}Q \\\\
-            &= \tau_0\ddx{Q} + \ddx{}\ddt{}Q + Q\ddx{\tau_0} \\\\
-            &= \tau_0\ddx{(UH)} + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0} \\
+<div class="equation" data-tag="6">
+    \ddx{\Jx}	&= \ddx{}\left[\tau_0 Q + \ddt{Q}\right] \\[1em]
+            &= \ddx{}(\tau_0 Q) + \ddx{}\ddt{}Q \\[1em]
+            &= Q\ddx{\tau_0} + \tau_0\ddx{Q} + \ddx{}\ddt{}Q \\[1em]
+            &= \tau_0\ddx{Q} + \ddx{}\ddt{}Q + Q\ddx{\tau_0} \\[1em]
+            &= \tau_0\ddx{(UH)} + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0}
 </div>
 <p>
     Now, returning to equation \eqref{eq3}, let's add zero to it in the form of:
@@ -130,7 +158,7 @@
 		\underbrace{
 			\tau_0\ddx{}(UH) + \ddx{}\ddt{}(UH) + UH\ddx{\tau_0}
 		}_{
-            \text{Note that this is equivalent to } \href{#}{\text{3}}
+            \text{Note that this is equivalent to } \href{#3}{()}
     } -
 	UH\ddx{\tau_0} &= 0 \\
 </div>
