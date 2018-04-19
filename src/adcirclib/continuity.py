@@ -181,8 +181,8 @@ def jxboundary(rhs, dt, q, tau_0):
     rhs[l] -= (dqdt + tau_0[l] * q_curr)
 
     # Right boundary
-    q_prev = q[0][r]
-    q_curr = q[1][r]
-    q_next = q[2][r]
+    q_prev = 0  # q[0][r]
+    q_curr = 0  # q[1][r]
+    q_next = 0  # q[2][r]
     dqdt = (q_next - q_prev) / (2 * dt)
     rhs[r] -= (dqdt + tau_0[r] * q_curr)
