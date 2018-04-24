@@ -13,8 +13,8 @@ from adcirclib.stress_surface import calculate_wind_stress
 num_nodes = 1000
 num_ts = 7200
 dt = 0.5
-width = 1000
-depth = 1
+width = 10000
+depth = 10
 wind = 1
 atm_pressure = 1013
 manning = 0.035
