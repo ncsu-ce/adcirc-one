@@ -1,51 +1,48 @@
+from math import sqrt
 import numpy as np
 import numpy.linalg as solver
 import matplotlib.pyplot as plt
-from scipy.integrate import quadrature as integrate
-from math import sqrt
+# from scipy.integrate import quadrature as integrate
+import util_output as out
+import util_stability as stability
 
 
-# Output setups
-np.set_printoptions(precision=3, linewidth=175)
+# Mesh setup
+num_nodes = 100
+num_ts = 7200
+dt = 10
 
 # Problem setup
-width = 1000
-depth = 1
+width = 100000  # 100km
+depth = 100  # 100m
 wind = 0
 atm_pressure = 1013
 mannings_n = 0.035
 g = 9.80665
 rho_0 = 1000
 rho_air = 0.001293
-flow_boundary_node = 'right'
+flow_boundary_node = num_nodes - 1
 flow_boundary_val = 0
-elev_boundary_node = 'left'
+elev_boundary_node = 0
 elev_boundary_val = depth
-
-# Mesh setup
-num_nodes = 1000
-num_ts = 7200
-dt = 10
+wave_loc = int(num_nodes / 2)
+out.center_column = wave_loc
 
 # Solver setup
 equations = 'nonconservative'
-bottom_friction = 'quadratic'
 tau_0 = 1
 alpha = [0.35, 0.3, 0.35]
+instability_z_cutoff = 10
 
 
 #
 # Run ADCIRC
 #
 
-
 nodes = np.linspace(0, width, num=num_nodes, endpoint=True)
 h = depth * np.ones(num_nodes)
 z = np.zeros((3, num_nodes))
 u = np.zeros((3, num_nodes))
-
-# Make a wave
-z[1][int(num_nodes/2)] += 0.001
 
 wind = np.full(num_nodes, wind)
 atm_pressure = np.full(num_nodes, atm_pressure)
@@ -53,9 +50,11 @@ mannings_n = np.full(num_nodes, mannings_n)
 tau_s = np.zeros(num_nodes)
 tau_b = np.zeros(num_nodes)
 
-flow_boundary_node = 0 if flow_boundary_node == 'left' else num_nodes - 1
-elev_boundary_node = 0 if elev_boundary_node == 'left' else num_nodes - 1
 elev_boundary_val -= depth
+
+# Make a tiny wave
+z[0][wave_loc] += 0.001
+z[1][wave_loc] += 0.001
 
 
 def z_prev(n=None):
@@ -130,11 +129,16 @@ def dphi_r(xl, xr):
 fig, ax = plt.subplots()
 lhs = np.zeros((num_nodes, num_nodes))
 rhs = np.zeros(num_nodes)
-for ts in range(2, num_ts):
+for ts in range(1, num_ts):
 
     time = ts * dt
     lhs.fill(0)
     rhs.fill(0)
+
+    out.print_vector(h + z[1], time, 'H')
+
+    # Check stability before advancing
+    stability.check_unstable(z, 10)
 
     # Calculate Q
     q = (h + z) * u
@@ -306,6 +310,8 @@ for ts in range(2, num_ts):
     rhs[elev_boundary_node] = rms * elev_boundary_val
 
     # Solve GWCE
+    # out.print_matrix(lhs, time, 'LHS')
+    # out.print_vector(rhs, time, 'rhs')
     dz = solver.solve(lhs, rhs)
     z[2] = z[1] + dz
 
@@ -402,16 +408,15 @@ for ts in range(2, num_ts):
     # Solve momentum
     if equations == 'nonconservative':
         u[2] = solver.solve(lhs, rhs)
-        # q[2] = (h + z[2]) * u[2]
 
     # Advance timestep
     z = np.roll(z, -1, axis=0)
     u = np.roll(u, -1, axis=0)
-    # q = np.roll(q, -1, axis=0)
 
-    print((h + z[1])[-20:])
+    z[2].fill(0)
+    u[2].fill(0)
+
     plt.cla()
     ax.set_ylim(depth-0.1, depth+0.1)
     ax.plot(h+z[1])
-    plt.pause(0.25)
-    # print(u[1][-20:])
+    plt.pause(0.05)
